@@ -10,7 +10,7 @@ namespace OOP_Lab4_SocialAppSimulator
         private string _name = "";
         private string _email = "";
         public string Nickname { get; private set; } = "";
-
+        public List<Post> Posts { get; private set; } = new List<Post>();
         public User(string name, string email, string nickname)
         {
             SetName(name);
@@ -41,7 +41,10 @@ namespace OOP_Lab4_SocialAppSimulator
             else throw new Exception("Неправильний формат нікнейму");
         }
 
-
+        public void CreatePost(Post post)
+        {
+            Posts.Add(post);
+        }
         public string GetEmail() => _email;
         public string GetName() => _name;
     }
