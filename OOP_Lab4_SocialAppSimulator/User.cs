@@ -45,6 +45,10 @@ namespace OOP_Lab4_SocialAppSimulator
         {
             Posts.Add(post);
         }
+        public void DeletePost(Post post)
+        {
+            Posts.Remove(post);
+        }
         public string GetEmail() => _email;
         public string GetName() => _name;
     }

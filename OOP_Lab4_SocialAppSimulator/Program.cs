@@ -19,9 +19,9 @@ namespace OOP_Lab4_SocialAppSimulator
                         [+] кожен пост має дату створення, текст поста, кількість лайків, коментарі до посту
                         [+] користувач може отримати остані 5 постів іншого користувача(вивести в консоль повну інформацію про остані 5 постів)
                         [+] коистувач може поставити лайк чи написати коментар до поста іншого користувача
-                        [] користувач може створити собі новий пост
-                        [] користувач може видалити свій пост
-                        [] Для виконання роботи використовуйте класи.структури та функції для організації коду.
+                        [+] користувач може створити собі новий пост
+                        [+] користувач може видалити свій пост
+                        [+] Для виконання роботи використовуйте класи.структури та функції для організації коду.
             */
 
             try
@@ -50,10 +50,10 @@ namespace OOP_Lab4_SocialAppSimulator
                             GetLastPosts();
                             break;
                         case 2:
-                            //CreatePost();
+                            CreatePost();
                             break;
                         case 3:
-                            //DeletePost();
+                            DeletePost();
                             break;
                         default:
                             Console.WriteLine("Невірний вибір");
@@ -188,6 +188,7 @@ namespace OOP_Lab4_SocialAppSimulator
             switch (action)
             {
                 case 1:
+                    if (selectedUser == OurUser) break;
                     Console.Write("Оберіть пост для лайку: ");
                     int num = Convert.ToInt32(Console.ReadLine()) - 1;
 
@@ -208,7 +209,7 @@ namespace OOP_Lab4_SocialAppSimulator
                     {
                         Post post = lastPosts[postIndex];
                         Console.Write("Введіть текст коментаря: ");
-                        string commentText = Console.ReadLine();
+                        string? commentText = Console.ReadLine();
                         if (!string.IsNullOrEmpty(commentText))
                         {
                             Comment comment = new Comment(commentText, OurUser);
@@ -222,6 +223,44 @@ namespace OOP_Lab4_SocialAppSimulator
                     return;
                 default:
                     return;
+            }
+        }
+        private static void CreatePost()
+        {
+            string? postText = "";
+            Console.Clear();
+            Console.Write($"Введіть текст поста: ");
+            postText = Console.ReadLine();
+            if (string.IsNullOrEmpty(postText)) return;
+
+            OurUser.CreatePost(new Post(postText, OurUser));
+            Console.Clear();
+            WriteLastPosts(OurUser);
+        }
+        private static void DeletePost()
+        {
+            Console.Clear();
+            List<Post> userPosts = OurUser.Posts.OrderByDescending(p => p.CreationDate).ToList();
+            if (userPosts.Count == 0)
+            {
+                Console.WriteLine("У вас немає постів для видалення.");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Ваші пости:");
+            for (int i = 0; i < userPosts.Count; i++)
+            {
+                Console.WriteLine($"{i + 1} - {userPosts[i].Text} ({userPosts[i].CreationDate})");
+            }
+            Console.Write($"Оберіть пост для видалення: ");
+            int postIndex = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            if (postIndex >= 0 && postIndex < userPosts.Count)
+            {
+                OurUser.DeletePost(userPosts[postIndex]);
+                Console.Clear();
+                WriteLastPosts(OurUser);
             }
         }
     }
